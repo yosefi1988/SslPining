@@ -1,0 +1,177 @@
+#
+# generated on 2019/04/15 03:14:05
+#
+# --table-start--
+dataClass=com.bmi.diamond.classes.model.main.setting.SettingNotification
+tableName=settingnotification
+# --table-fields-start--
+# --field-start--
+fieldName=id
+canBeNull=false
+generatedId=true
+# --field-end--
+# --field-start--
+fieldName=showToolbar
+# --field-end--
+# --field-start--
+fieldName=sound
+# --field-end--
+# --field-start--
+fieldName=playSound
+# --field-end--
+# --field-start--
+fieldName=playVibrate
+# --field-end--
+# --field-start--
+fieldName=clearDataAfterXDay
+# --field-end--
+# --field-start--
+fieldName=notifCount
+# --field-end--
+# --field-start--
+fieldName=token
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
+# --table-start--
+dataClass=com.bmi.diamond.classes.model.main.setting.Setting
+tableName=setting
+# --table-fields-start--
+# --field-start--
+fieldName=id
+canBeNull=false
+generatedId=true
+# --field-end--
+# --field-start--
+fieldName=notification
+canBeNull=false
+foreign=true
+foreignAutoRefresh=true
+maxForeignAutoRefreshLevel=2
+# --field-end--
+# --field-start--
+fieldName=lastSettingChangeateTime
+# --field-end--
+# --field-start--
+fieldName=lastLoginTime
+# --field-end--
+# --field-start--
+fieldName=lastChangePasswordTime
+# --field-end--
+# --field-start--
+fieldName=askNazarsanjiBeforClose
+# --field-end--
+# --field-start--
+fieldName=loginByFingerPrint
+# --field-end--
+# --field-start--
+fieldName=nazarsanjiGet1003
+# --field-end--
+# --field-start--
+fieldName=forceDownload
+# --field-end--
+# --field-start--
+fieldName=showDownload
+# --field-end--
+# --field-start--
+fieldName=appVersion
+# --field-end--
+# --field-start--
+fieldName=runCounter
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
+# --table-start--
+dataClass=com.bmi.diamond.classes.model.main.Deposit
+tableName=deposit
+# --table-fields-start--
+# --field-start--
+fieldName=id
+canBeNull=false
+generatedId=true
+# --field-end--
+# --field-start--
+fieldName=Balance
+# --field-end--
+# --field-start--
+fieldName=BlockedAmount
+# --field-end--
+# --field-start--
+fieldName=BranchCode
+# --field-end--
+# --field-start--
+fieldName=CurrencyType
+# --field-end--
+# --field-start--
+fieldName=DepositNumber
+canBeNull=false
+# --field-end--
+# --field-start--
+fieldName=DepositTitle
+# --field-end--
+# --field-start--
+fieldName=IsRegisterDepositForCashBack
+# --field-end--
+# --field-start--
+fieldName=customer
+foreign=true
+foreignAutoRefresh=true
+maxForeignAutoRefreshLevel=2
+foreignAutoCreate=true
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
+# --table-start--
+dataClass=com.bmi.diamond.classes.model.main.CustomerLadder
+tableName=customerladder
+# --table-fields-start--
+# --field-start--
+fieldName=id
+canBeNull=false
+generatedId=true
+# --field-end--
+# --field-start--
+fieldName=ColorLadderStep
+# --field-end--
+# --field-start--
+fieldName=LadderName
+# --field-end--
+# --field-start--
+fieldName=LadderStepName
+# --field-end--
+# --field-start--
+fieldName=LadderStepCode
+# --field-end--
+# --field-start--
+fieldName=MaxScore
+# --field-end--
+# --field-start--
+fieldName=MinScore
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
+# --table-start--
+dataClass=com.bmi.diamond.classes.model.main.CustomerScores
+tableName=customerscores
+# --table-fields-start--
+# --field-start--
+fieldName=id
+canBeNull=false
+generatedId=true
+# --field-end--
+# --field-start--
+fieldName=SamanScore
+# --field-end--
+# --field-start--
+fieldName=Score
+# --field-end--
+# --field-start--
+fieldName=StarScore
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
