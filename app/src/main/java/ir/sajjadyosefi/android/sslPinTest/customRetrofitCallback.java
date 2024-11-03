@@ -34,7 +34,6 @@ public class customRetrofitCallback<Object> implements Callback<java.lang.Object
     private void preRequest() {
         if (buttonSubmit != null)
             buttonSubmit.setEnabled(false);
-
     }
 
     private void afterResponse() {
@@ -79,30 +78,29 @@ public class customRetrofitCallback<Object> implements Callback<java.lang.Object
 
     }
 
-
     @Override
     public void onFailure(final Call<java.lang.Object> call, Throwable t) {
 
         if (t.getMessage().contains("SSL handshake timed out")) {
             Toast.makeText(mContext,"Not ok SSL handshake timed out",Toast.LENGTH_LONG).show();
-
         }else if (t.getMessage().contains("SSL handshake aborted: ssl")) {
             Toast.makeText(mContext,"Not ok SSL handshake aborted",Toast.LENGTH_LONG).show();
-
+        }else if (t.getMessage().contains("Certificate validation failed for")) {
+            Toast.makeText(mContext," Certificate validation failed for your Address",Toast.LENGTH_LONG).show();
+        }else if (t.getMessage().contains("certification path not found.")) {
+            Toast.makeText(mContext,"java.security.cert.CertPathValidatorException: Trust anchor for certification path not found.",Toast.LENGTH_LONG).show();
+        }else if (t.getMessage().contains("Pin verification failed")) {
+            Toast.makeText(mContext,"Not ok  Pin verification failed",Toast.LENGTH_LONG).show();
         }else if (t.getMessage().contains("Certificate validation failed for www.bmi.ir")) {
             Toast.makeText(mContext,"Not ok ( provide UI indication of an insecure connection )  Certificate validation failed ",Toast.LENGTH_LONG).show();
-
         }else {
             Toast.makeText(mContext,"Not ok",Toast.LENGTH_LONG).show();
-
         }
 
         int a = 5;
     }
 
-
     public static void showConnectionLostDialog(Context context, final ProgressBar progressBar, final Runnable runnable) {
-
         int a = 5;
     }
 
@@ -110,10 +108,7 @@ public class customRetrofitCallback<Object> implements Callback<java.lang.Object
         call.clone().enqueue(this);
     }
 
-
-
     public void retry(Call<java.lang.Object> call, Throwable t) {
         int a = 5;
-
     }
 }

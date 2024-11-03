@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
-    <domain-config>
-        <domain includeSubdomains="true">www.bmi.ir</domain>
+    <domain-config cleartextTrafficPermitted="false">
+        <!--        <domain includeSubdomains="true">sb24.ir</domain>-->
+        <domain includeSubdomains="true">apigw.sb24.ir</domain>
+
         <trust-anchors>
-            <certificates src="@raw/cerbinary" />
+            <certificates overridePins="false" src="@raw/sb24ir3" />
+            <!--            <certificates src="@raw/sb24ir3" />-->
         </trust-anchors>
-        <pin-set>
-            <pin digest="SHA-256">jh0yDwEJCbayG0EenYApQ40vAVSMUh9N6sKtKUbaQDg=</pin>
-            <pin digest="SHA-256">S4AbJNGvyS57nzJwv8sPMUML8VHSqH1vbiBftdPcErI=</pin>
-        </pin-set>
+
+        <!--        <domain-config cleartextTrafficPermitted="false">-->
+        <!--            <domain includeSubdomains="true">apigw.sb24.ir</domain>-->
+        <!--        </domain-config>-->
         <trustkit-config enforcePinning="true"></trustkit-config>
+        <pin-set>
+            <pin digest="SHA-256">tr0KDvDiF22ccuLlujt0e/N9Mait5awTTZAokDILLiY=</pin>
+            <pin digest="SHA-256">N0CkBXa2oSb2VbJ0SbRYpL/8IIklQOCUXDpQrQCM0jg=</pin>
+        </pin-set>
     </domain-config>
 </network-security-config>

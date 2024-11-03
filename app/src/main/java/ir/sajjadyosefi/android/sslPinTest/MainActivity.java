@@ -1,19 +1,27 @@
 package ir.sajjadyosefi.android.sslPinTest;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import com.datatheorem.android.trustkit.TrustKit;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
 
 import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import okhttp3.CertificatePinner;
 import okhttp3.OkHttpClient;
@@ -38,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
         rootView = (ViewGroup) ((ViewGroup) this.findViewById(android.R.id.content)).getChildAt(0);
         mContext = this;
 
+
+        //1 OK
         final MaintenanceModeRequest requestmaintenanceModeCheck = prepareMaintenanceModeRequest();
         Callback<Object> xxxxxxxxxxxxx = new customRetrofitCallback<Object>(mContext, rootView, true, null, new Callback<java.lang.Object>() {
             @Override
@@ -50,47 +60,51 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<Object> call, Throwable t) {
 
-
-            }
-
-        });
-        Global.retrofitHelper.maintenanceMode(requestmaintenanceModeCheck, xxxxxxxxxxxxx);
-
-
-        //2
-        //2
-        createRequest(new okhttp3.Callback() {
-            @Override
-            public void onFailure(okhttp3.Call call, IOException e) {
-
-            }
-
-            @Override
-            public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException {
                 Gson gson = new Gson();
-                JsonElement jsonElement = gson.toJsonTree(response.body());
+                gson = new Gson();
             }
-        });
 
+        });
+//        Global.retrofitHelper.maintenanceMode(requestmaintenanceModeCheck, xxxxxxxxxxxxx);
+
+
+
+        //2 ok
+//        try {
+//            createRequest(new okhttp3.Callback() {
+//                @Override
+//                public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException {
+//                    Gson gson = new Gson();
+//                    JsonElement jsonElement = gson.toJsonTree(response.body());
+//                }
+//
+//                @Override
+//                public void onFailure(okhttp3.Call call, IOException e) {
+//                    Gson gson = new Gson();
+//                    JsonElement jsonElement = gson.toJsonTree(e);
+//                }
+//            });
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
 
 
         //3
+        //RetrofitHelper ساده شده ی
         OkHttpClient.Builder httpBuilder = new OkHttpClient.Builder();
         CertificatePinner certificatePinner = new CertificatePinner.Builder()
-                .add("bmi.ir", "sha256/S4AbJNGvyS57nzJwv8sPMUML8VHSqH1vbiBftdPcErI=")
+                .add("apigw.sb24.ir", "sha256/tr0KDvDiF22ccuLlujt0e/N9Mait5awTTZAokDILLiY=")
                 .build();
         OkHttpClient client1 = httpBuilder
                 .certificatePinner(certificatePinner)
                 .build();
         Retrofit retrofit = new Retrofit.Builder()
                 .client(client1)
-                .baseUrl("https://bmi.ir/").addConverterFactory(GsonConverterFactory.create()).build();
+                .baseUrl("https://apigw.sb24.ir/").addConverterFactory(GsonConverterFactory.create()).build();
         restApi userClient = retrofit.create(restApi.class);
         Call<Object> call = userClient.maintenanceMode(requestmaintenanceModeCheck);
         call.enqueue(xxxxxxxxxxxxx);
     }
-
-
 
     public static MaintenanceModeRequest prepareMaintenanceModeRequest() {
         MaintenanceModeRequest request = new MaintenanceModeRequest();
@@ -101,40 +115,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public okhttp3.Call createRequest(okhttp3.Callback callback) {
-
+    public void createRequest(okhttp3.Callback callback) {
         URL url = null;
         try {
-            url = new URL("https://www.bmi.ir");
-//            url = new URL(REST_API_IP_ADDRESS_M);
-
+            url = new URL("https://apigw.sb24.ir");
             String host = url.getHost();
-            HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
 
-//            SSLSocketFactory sslSocketFactory = TrustKit.getInstance().getSSLSocketFactory(host);
-//            X509TrustManager trustManager = TrustKit.getInstance().getTrustManager(host);
-//            connection.setSSLSocketFactory(sslSocketFactory);
-
-            OkHttpClient client = new OkHttpClient().newBuilder()
-//                    .sslSocketFactory(sslSocketFactory, trustManager)
+            OkHttpClient client = new OkHttpClient.Builder()
+                    .sslSocketFactory(TrustKit.getInstance().getSSLSocketFactory(host), TrustKit.getInstance().getTrustManager(host))
                     .build();
 
             Request request = new Request.Builder()
                     .url(url)
                     .build();
 
-            okhttp3.Call call = client.newCall(request);
-            call.enqueue(callback);
-
-            return call;
+            client.newCall(request).enqueue(callback);
         } catch (MalformedURLException e) {
-            e.printStackTrace();
-            return null;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-
+            throw new RuntimeException(e);
         }
     }
-
 }

@@ -1,12 +1,7 @@
 package ir.sajjadyosefi.android.sslPinTest;
 
-import android.content.Context;
-
-import com.datatheorem.android.trustkit.TrustKit;
-
-import java.io.IOException;
-import java.net.URL;
-
+import ir.sajjadyosefi.android.sslPinTest.MaintenanceModeRequest;
+import ir.sajjadyosefi.android.sslPinTest.restApi;
 import okhttp3.CertificatePinner;
 import okhttp3.Dispatcher;
 import okhttp3.Interceptor;
@@ -16,24 +11,24 @@ import retrofit2.Callback;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import java.io.IOException;
+import java.net.URL;
+
 import static ir.sajjadyosefi.android.sslPinTest.Url.REST_API_IP_ADDRESS;
 
-/**
- * Created by sajjad on 11/7/2018.
- */
+import android.content.Context;
 
 public class RetrofitHelper {
 
     private static restApi service2;
     private static RetrofitHelper retrofitHelper2;
 
+    //trustKit and network xml not need
+    //اینجا تنها از OkHttpClient و CertificatePinner برای پین کردن گواهی‌ها استفاده شده است.
     private RetrofitHelper() {
         try {
-            URL url = new URL("https://www.bmi.ir");
-//            URL url = new URL(Url.REST_API_IP_ADDRESS_M);
+            URL url = new URL("https://apigw.sb24.ir");
             String host = url.getHost();
-
-//            HostSelectionInterceptor interceptor = new HostSelectionInterceptor();
 
             Dispatcher dispatcher = new Dispatcher();
             dispatcher.setMaxRequests(1);
@@ -41,37 +36,22 @@ public class RetrofitHelper {
             Interceptor interceptor = new Interceptor() {
                 @Override
                 public okhttp3.Response intercept(Chain chain) throws IOException {
-//                    SystemClock.sleep(5000);
                     return chain.proceed(chain.request());
                 }
             };
 
             OkHttpClient.Builder httpBuilder = new OkHttpClient().newBuilder();
-            CertificatePinner certificatePinner = null ;
 
-            try {
-                certificatePinner = new CertificatePinner.Builder()
-                        .add((new URL("https://www.bmi.ir")).getHost(), "sha256/HjdWh/siHywMS+PfpxB1PHEUU1ZjZhioRUdRlI4o7zc=")
-                        .build();
-
-            }catch (Exception ex){
-                ex.printStackTrace();
-                int a = 9 ;
-                a ++ ;
-            }
-
-            // OkHttp 3
-            OkHttpClient client =  httpBuilder
-                    .addInterceptor(interceptor)
-                    .certificatePinner(certificatePinner)
-                    .sslSocketFactory(
-                            TrustKit.getInstance().getSSLSocketFactory((new URL("https://www.bmi.ir")).getHost()),
-                            TrustKit.getInstance().getTrustManager((new URL("https://www.bmi.ir")).getHost()))
+            // تنظیم CertificatePinner
+            CertificatePinner certificatePinner = new CertificatePinner.Builder()
+                    .add(host, "sha256/tr0KDvDiF22ccuLlujt0e/N9Mait5awTTZAokDILLiY=")
                     .build();
 
-            //3
-//            OkHttpClient okHttpClient = UnsafeOkHttpClient.getUnsafeOkHttpClient();
-
+            // ساخت OkHttpClient با CertificatePinner
+            OkHttpClient client = httpBuilder
+                    .addInterceptor(interceptor)
+                    .certificatePinner(certificatePinner)
+                    .build();
 
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(REST_API_IP_ADDRESS)
@@ -80,10 +60,7 @@ public class RetrofitHelper {
                     .build();
 
             service2 = retrofit.create(restApi.class);
-
-            int a = 4 ;
-            a++;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -95,12 +72,8 @@ public class RetrofitHelper {
         return retrofitHelper2;
     }
 
-
     public void maintenanceMode(MaintenanceModeRequest request, Callback<Object> objectCallback) {
         Call<Object> callBack = service2.maintenanceMode(request);
         callBack.enqueue(objectCallback);
     }
-
-
-
 }
